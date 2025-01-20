@@ -9,7 +9,7 @@ export default function Home() {
         <span className="text-sm md:text-base">How-to</span>
         <div className="flex flex-col items-center">
           <span className="text-xl md:text-3xl font-bold">
-            Parliamentdle 🇹🇭
+            🇹🇭 Parliament-dle
           </span>
           <span className="text-sm md:text-base">
             Guess who made the promise
