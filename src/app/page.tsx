@@ -17,10 +17,11 @@ export default function Home() {
         </div>
         <span className="text-sm md:text-base">Stats</span>
       </header>
-      <main className="flex flex-col px-12 w-full justify-center items-center">
-        <div className="flex flex-col gap-4 w-full md:w-2/3 lg:w-1/3">
+      <main className="flex flex-col px-14 w-full justify-center items-center">
+        <div className="flex flex-col gap-4 max-w-96">
           <QuoteText text={promiseTitle} />
         </div>
+        <div></div>
       </main>
       <footer className="absolute bottom-0 pb-4 md:pb-8 w-full flex items-center justify-center">
         <span className="flex flex-rol">
