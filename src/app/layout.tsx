@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Chakra_Petch } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const chakraPetch = Chakra_Petch({
   subsets: ["latin", "thai"],
@@ -22,7 +23,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={chakraPetch.className}>{children}</body>
+      <body className={chakraPetch.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

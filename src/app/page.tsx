@@ -1,4 +1,8 @@
 import QuoteText from "@/components/QuoteText";
+import ThemeToggle from "@/components/ThemeToggle";
+import PartyInput from "@/components/PartyInput";
+import { Button } from "@/components/ui/button";
+import { CircleHelp } from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
@@ -6,7 +10,9 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col gap-8">
       <header className="flex flex-row justify-between items-center p-4 border-b border-gray-200">
-        <span className="text-sm md:text-base">How-to</span>
+        <Button variant="outline" size="icon">
+          <CircleHelp />
+        </Button>
         <div className="flex flex-col items-center">
           <span className="text-xl md:text-3xl font-bold">
             🇹🇭 Parliament-dle
@@ -15,13 +21,16 @@ export default function Home() {
             Guess who made the promise
           </span>
         </div>
-        <span className="text-sm md:text-base">Stats</span>
+        <ThemeToggle />
       </header>
       <main className="flex flex-col px-14 w-full justify-center items-center">
-        <div className="flex flex-col gap-4 max-w-96">
+        <div className="flex flex-col gap-4 max-w-96 justify-center items-center">
           <QuoteText text={promiseTitle} />
+          <p className="mt-4">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
+          <div className="w-full mt-4">
+            <PartyInput />
+          </div>
         </div>
-        <div></div>
       </main>
       <footer className="absolute bottom-0 pb-4 md:pb-8 w-full flex items-center justify-center">
         <span className="flex flex-rol">

@@ -2,7 +2,7 @@ import React from "react";
 
 const QuoteText = ({ text }: { text: string }) => {
   return (
-    <blockquote className="flex flex-col text-xl italic font-semibold text-white">
+    <blockquote className="flex flex-col text-xl italic font-semibold dark:text-white">
       <div>
         <svg
           className="w-8 h-8 mb-2 -ml-6"
