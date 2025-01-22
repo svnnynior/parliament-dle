@@ -6,20 +6,11 @@ import PartyInput from "@/components/PartyInput";
 import { Button } from "@/components/ui/button";
 import { CircleHelp } from "lucide-react";
 import Image from "next/image";
-import { Promise } from "@/data/promise";
 import { useCallback, useState } from "react";
 import { parties, Party } from "@/data/party";
 import { cn } from "@/lib/utils";
-
-interface DailyPromise {
-  title: Promise["promiseTitle"];
-  partyId: number;
-  partyName: string;
-  status: Promise["status"];
-  explain: Promise["explain"];
-  link: string | null;
-}
-
+import PromiseDialog from "@/components/PromiseDialog";
+import { DailyPromise } from "@/data/promise";
 interface Guess {
   partyId: number;
   partyName: string;
@@ -32,8 +23,7 @@ export default function PromiseDle() {
     partyId: 10,
     partyName: "ชาติพัฒนา",
     status: "nodata",
-    explain:
-      "เพื่อสนับสนุนให้เกิดนักธุรกิจรุ่นใหม่      \n\nซึ่งไม่พบความเคลื่อนไหว",
+    explain: "เพื่อสนับสนุนให้เกิดนักธุรกิจรุ่นใหม่",
     link: "https://www.bangkokbiznews.com/advertorials/news/1259",
   };
 
@@ -141,7 +131,7 @@ export default function PromiseDle() {
             {isDone && guesses.length < 6 && <EmptyGuess />}
           </div>
           {isDone && (
-            <div className="flex flex-col gap-2 mt-4 items-center">
+            <div className="flex flex-col gap-4 mt-4 items-center">
               {isCorrect ? (
                 <p className="text-center">
                   เก่งมาก ! 👍🏼
@@ -154,7 +144,7 @@ export default function PromiseDle() {
                   ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
                 </p>
               )}
-              <Button className="mt-2 px-4 py-2">ดูรายละเอียดคำสัญญา</Button>
+              <PromiseDialog promise={promise} />
             </div>
           )}
         </div>
