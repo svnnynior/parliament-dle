@@ -25,7 +25,11 @@ function PartyInput() {
   const [selectedParty, setSelectedParty] = React.useState<string>("");
 
   const displayValue = selectedParty
-    ? `พรรค${parties.find((party) => party.codeEN === selectedParty)?.name}`
+    ? `พรรค${
+        parties.find(
+          (party) => party.id.toString() === selectedParty.toString()
+        )?.name
+      }`
     : "เลือกพรรคการเมือง...";
 
   return (
@@ -44,15 +48,26 @@ function PartyInput() {
         side="bottom"
         avoidCollisions={false}
       >
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const partyName = `พรรค${
+              parties.find((party) => party.id.toString() === value.toString())
+                ?.name
+            }`;
+            if (partyName && partyName.includes(search)) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
           <CommandInput placeholder="ค้นหาพรรคการเมือง..." />
           <CommandList>
             <CommandEmpty>ไม่พบพรรคการเมือง</CommandEmpty>
             <CommandGroup>
               {parties.map((party) => (
                 <CommandItem
-                  key={party.codeEN}
-                  value={party.codeEN}
+                  key={party.id.toString()}
+                  value={party.id.toString()}
                   onSelect={(currentValue) => {
                     setSelectedParty(
                       currentValue === selectedParty ? "" : currentValue
@@ -64,7 +79,7 @@ function PartyInput() {
                   <Check
                     className={cn(
                       "ml-auto",
-                      selectedParty === party.codeEN
+                      selectedParty === party.id.toString()
                         ? "opacity-100"
                         : "opacity-0"
                     )}

@@ -73,7 +73,7 @@ export const parties: Party[] = [
   { id: 65, name: "รวมใจไทย", codeTH: "รจท", codeEN: "RJP" },
   { id: 66, name: "พลังธรรมใหม่", codeTH: "พธม", codeEN: "NPD" },
   { id: 67, name: "ประชาชนปฏิรูป", codeTH: "ปชช", codeEN: "PPR" },
-  { id: 68, name: "อนาคตใหม่", codeTH: "อนค", codeEN: "FWP" },
+  { id: 68, name: "ก้าวไกล/ประชาชน", codeTH: "ปชช", codeEN: "PP" },
   { id: 69, name: "ไทยธรรม", codeTH: "ทธม", codeEN: "THMP" },
   { id: 70, name: "เพื่อนไทย", codeTH: "พ", codeEN: "TF" },
   { id: 71, name: "ไทยศรีวิไลย์", codeTH: "ทศล", codeEN: "TCL" },
