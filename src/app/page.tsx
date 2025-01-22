@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { CircleHelp } from "lucide-react";
 import Image from "next/image";
 import { Promise } from "@/data/promise";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { parties, Party } from "@/data/party";
 import { cn } from "@/lib/utils";
 
@@ -39,20 +39,31 @@ export default function PromiseDle() {
 
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [selectedParty, setSelectedParty] = useState<Party | null>(null);
+  const [isDone, setIsDone] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
 
   const onPartyChange = (party: Party | null) => {
     setSelectedParty(party);
   };
 
-  const onGuess = (party: Party) => {
-    const guess: Guess = {
-      partyId: party.id,
-      partyName: party.name,
-      isCorrect: promise.partyId === party.id,
-    };
-    setGuesses((prevGuesses) => [...prevGuesses, guess]);
-    setSelectedParty(null);
-  };
+  const onGuess = useCallback(
+    (party: Party) => {
+      const isCorrect = promise.partyId === party.id;
+      const guess: Guess = {
+        partyId: party.id,
+        partyName: party.name,
+        isCorrect: isCorrect,
+      };
+      setGuesses((prevGuesses) => [...prevGuesses, guess]);
+      setSelectedParty(null);
+
+      if (isCorrect || guesses.length >= 5) {
+        setIsDone(true);
+        setIsCorrect(isCorrect);
+      }
+    },
+    [guesses, promise.partyId]
+  );
 
   const numGuesses = guesses.length;
   const partyList = parties.filter(
@@ -101,37 +112,54 @@ export default function PromiseDle() {
       <main className="flex flex-col px-14 w-full justify-center items-center">
         <div className="flex flex-col gap-4 max-w-96 justify-center items-center">
           <QuoteText text={promise.title} />
-          <p className="mt-8">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
+          <p className="mt-4">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
           <div className="w-full  flex flex-col gap-2">
             {guesses.map((guess) => (
               <GuessResult guess={guess} />
             ))}
-            <div className="flex flex-row gap-2">
-              <PartyInput
-                partyList={partyList}
-                selectedParty={selectedParty}
-                onPartyChange={onPartyChange}
-              />
-              <Button
-                disabled={!selectedParty}
-                className={cn(
-                  selectedParty ? "cursor-pointer" : "cursor-not-allowed"
-                )}
-                onClick={() => {
-                  if (!selectedParty) return;
-                  onGuess(selectedParty);
-                }}
-              >
-                ทาย
-              </Button>
-            </div>
+            {!isDone && (
+              <div className="flex flex-row gap-2">
+                <PartyInput
+                  partyList={partyList}
+                  selectedParty={selectedParty}
+                  onPartyChange={onPartyChange}
+                />
+                <Button
+                  disabled={!selectedParty}
+                  onClick={() => {
+                    if (!selectedParty) return;
+                    onGuess(selectedParty);
+                  }}
+                >
+                  ทาย
+                </Button>
+              </div>
+            )}
             {Array.from({ length: 6 - numGuesses - 1 }).map((_, index) => (
               <EmptyGuess key={index} />
             ))}
+            {isDone && guesses.length < 6 && <EmptyGuess />}
           </div>
+          {isDone && (
+            <div className="flex flex-col gap-2 mt-4 items-center">
+              {isCorrect ? (
+                <p className="text-center">
+                  เก่งมาก ! 👍🏼
+                  <br />
+                  คุณจำสิ่งที่เขาพูดได้ แต่คนที่เป็นคนพูดเขาจะยังจำได้มั้ยนะ ?
+                </p>
+              ) : (
+                <p className="text-center">
+                  👋🏼 &nbsp; ไม่เป็นไรนะ <br />
+                  ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
+                </p>
+              )}
+              <Button className="mt-2 px-4 py-2">ดูรายละเอียดคำสัญญา</Button>
+            </div>
+          )}
         </div>
       </main>
-      <footer className="pb-4 md:pb-8 w-full flex items-center justify-center">
+      <footer className="mt-4 pb-4 md:pb-8 w-full flex items-center justify-center">
         <span className="flex flex-rol">
           <Image
             aria-hidden
