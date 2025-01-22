@@ -34,12 +34,13 @@ function PartyInput() {
         <Input
           role="combobox"
           aria-expanded={open}
-          className="w-[300px] justify-between"
+          className="w-full justify-between bg-zinc-200 dark:bg-zinc-800"
           value={displayValue}
         />
       </PopoverTrigger>
       <PopoverContent
-        className="w-[300px]"
+        className="w-[270px] md:w-[320px]"
+        align="start"
         side="bottom"
         avoidCollisions={false}
       >

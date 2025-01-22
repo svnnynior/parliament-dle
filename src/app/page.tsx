@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { CircleHelp } from "lucide-react";
 import Image from "next/image";
 
+const EmptyGuess = () => {
+  return (
+    <div className="w-full bg-zinc-200 dark:bg-zinc-800 border rounded-md px-3 py-2">
+      &nbsp;
+    </div>
+  );
+};
+
 export default function Home() {
   const promiseTitle = "จัดตั้งกองทุนส่งเสริมดิจิทัล Start Up 5,000 ล้านบาท";
   return (
@@ -26,9 +34,16 @@ export default function Home() {
       <main className="flex flex-col px-14 w-full justify-center items-center">
         <div className="flex flex-col gap-4 max-w-96 justify-center items-center">
           <QuoteText text={promiseTitle} />
-          <p className="mt-4">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
-          <div className="w-full mt-4">
-            <PartyInput />
+          <p className="mt-6">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
+          <div className="w-full mt-4 flex flex-col gap-2">
+            <div className="flex flex-row gap-2">
+              <PartyInput />
+              <Button>ทาย</Button>
+            </div>
+            <EmptyGuess />
+            <EmptyGuess />
+            <EmptyGuess />
+            <EmptyGuess />
           </div>
         </div>
       </main>
