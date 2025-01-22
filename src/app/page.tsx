@@ -1,20 +1,87 @@
+"use client";
+
 import QuoteText from "@/components/QuoteText";
 import ThemeToggle from "@/components/ThemeToggle";
 import PartyInput from "@/components/PartyInput";
 import { Button } from "@/components/ui/button";
 import { CircleHelp } from "lucide-react";
 import Image from "next/image";
+import { Promise } from "@/data/promise";
+import { useState } from "react";
+import { parties, Party } from "@/data/party";
+import { cn } from "@/lib/utils";
 
-const EmptyGuess = () => {
-  return (
-    <div className="w-full bg-zinc-200 dark:bg-zinc-800 border rounded-md px-3 py-2">
-      &nbsp;
-    </div>
+interface DailyPromise {
+  title: Promise["promiseTitle"];
+  partyId: number;
+  partyName: string;
+  status: Promise["status"];
+  explain: Promise["explain"];
+  link: string | null;
+}
+
+interface Guess {
+  partyId: number;
+  partyName: string;
+  isCorrect: boolean;
+}
+
+export default function PromiseDle() {
+  const promise: DailyPromise = {
+    title: "จัดตั้งกองทุนส่งเสริมดิจิทัล Start Up 5,000 ล้านบาท",
+    partyId: 10,
+    partyName: "ชาติพัฒนา",
+    status: "nodata",
+    explain:
+      "เพื่อสนับสนุนให้เกิดนักธุรกิจรุ่นใหม่      \n\nซึ่งไม่พบความเคลื่อนไหว",
+    link: "https://www.bangkokbiznews.com/advertorials/news/1259",
+  };
+
+  const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [selectedParty, setSelectedParty] = useState<Party | null>(null);
+
+  const onPartyChange = (party: Party | null) => {
+    setSelectedParty(party);
+  };
+
+  const onGuess = (party: Party) => {
+    const guess: Guess = {
+      partyId: party.id,
+      partyName: party.name,
+      isCorrect: promise.partyId === party.id,
+    };
+    setGuesses((prevGuesses) => [...prevGuesses, guess]);
+    setSelectedParty(null);
+  };
+
+  const numGuesses = guesses.length;
+  const partyList = parties.filter(
+    (party) => !guesses.some((guess) => guess.partyId === party.id)
   );
-};
 
-export default function Home() {
-  const promiseTitle = "จัดตั้งกองทุนส่งเสริมดิจิทัล Start Up 5,000 ล้านบาท";
+  const EmptyGuess: React.FC = () => {
+    return (
+      <div className="w-full bg-zinc-100 dark:bg-zinc-900 border rounded-md px-3 py-2">
+        &nbsp;
+      </div>
+    );
+  };
+
+  const GuessResult: React.FC<{ guess: Guess }> = ({ guess }) => {
+    return (
+      <div
+        className={cn(
+          "w-full border rounded-md px-3 py-2 text-center",
+          guess.isCorrect
+            ? "bg-green-400 dark:bg-green-600"
+            : "bg-red-300 dark:bg-red-900"
+        )}
+      >
+        พรรค{guess.partyName}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen flex flex-col gap-8">
       <header className="flex flex-row justify-between items-center p-4 border-b border-gray-200">
@@ -33,21 +100,38 @@ export default function Home() {
       </header>
       <main className="flex flex-col px-14 w-full justify-center items-center">
         <div className="flex flex-col gap-4 max-w-96 justify-center items-center">
-          <QuoteText text={promiseTitle} />
-          <p className="mt-6">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
-          <div className="w-full mt-4 flex flex-col gap-2">
+          <QuoteText text={promise.title} />
+          <p className="mt-8">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
+          <div className="w-full  flex flex-col gap-2">
+            {guesses.map((guess) => (
+              <GuessResult guess={guess} />
+            ))}
             <div className="flex flex-row gap-2">
-              <PartyInput />
-              <Button>ทาย</Button>
+              <PartyInput
+                partyList={partyList}
+                selectedParty={selectedParty}
+                onPartyChange={onPartyChange}
+              />
+              <Button
+                disabled={!selectedParty}
+                className={cn(
+                  selectedParty ? "cursor-pointer" : "cursor-not-allowed"
+                )}
+                onClick={() => {
+                  if (!selectedParty) return;
+                  onGuess(selectedParty);
+                }}
+              >
+                ทาย
+              </Button>
             </div>
-            <EmptyGuess />
-            <EmptyGuess />
-            <EmptyGuess />
-            <EmptyGuess />
+            {Array.from({ length: 6 - numGuesses - 1 }).map((_, index) => (
+              <EmptyGuess key={index} />
+            ))}
           </div>
         </div>
       </main>
-      <footer className="absolute bottom-0 pb-4 md:pb-8 w-full flex items-center justify-center">
+      <footer className="pb-4 md:pb-8 w-full flex items-center justify-center">
         <span className="flex flex-rol">
           <Image
             aria-hidden

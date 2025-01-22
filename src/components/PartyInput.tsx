@@ -18,18 +18,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { parties } from "@/data/party";
+import { Party } from "@/data/party";
 
-function PartyInput() {
+interface PartyInputProps {
+  partyList: Party[];
+  selectedParty: Party | null;
+  onPartyChange: (party: Party | null) => void;
+}
+
+function PartyInput({
+  partyList,
+  selectedParty,
+  onPartyChange,
+}: PartyInputProps) {
   const [open, setOpen] = React.useState(false);
-  const [selectedParty, setSelectedParty] = React.useState<string>("");
 
   const displayValue = selectedParty
-    ? `พรรค${
-        parties.find(
-          (party) => party.id.toString() === selectedParty.toString()
-        )?.name
-      }`
+    ? `พรรค${selectedParty.name}`
     : "เลือกพรรคการเมือง...";
 
   return (
@@ -38,11 +43,12 @@ function PartyInput() {
         <Input
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between bg-zinc-200 dark:bg-zinc-800"
+          className="w-full justify-between bg-zinc-300 dark:bg-zinc-800 cursor-pointer"
           value={displayValue}
         />
       </PopoverTrigger>
       <PopoverContent
+        asChild
         className="w-[270px] md:w-[320px]"
         align="start"
         side="bottom"
@@ -51,8 +57,9 @@ function PartyInput() {
         <Command
           filter={(value, search) => {
             const partyName = `พรรค${
-              parties.find((party) => party.id.toString() === value.toString())
-                ?.name
+              partyList.find(
+                (party) => party.id.toString() === value.toString()
+              )?.name
             }`;
             if (partyName && partyName.includes(search)) {
               return 1;
@@ -64,13 +71,15 @@ function PartyInput() {
           <CommandList>
             <CommandEmpty>ไม่พบพรรคการเมือง</CommandEmpty>
             <CommandGroup>
-              {parties.map((party) => (
+              {partyList.map((party) => (
                 <CommandItem
                   key={party.id.toString()}
                   value={party.id.toString()}
                   onSelect={(currentValue) => {
-                    setSelectedParty(
-                      currentValue === selectedParty ? "" : currentValue
+                    onPartyChange(
+                      currentValue === selectedParty?.id.toString()
+                        ? null
+                        : party
                     );
                     setOpen(false);
                   }}
@@ -79,7 +88,7 @@ function PartyInput() {
                   <Check
                     className={cn(
                       "ml-auto",
-                      selectedParty === party.id.toString()
+                      selectedParty?.id.toString() === party.id.toString()
                         ? "opacity-100"
                         : "opacity-0"
                     )}
