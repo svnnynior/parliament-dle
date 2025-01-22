@@ -18,7 +18,7 @@ function PromiseDialog({ promise }: { promise: DailyPromise }) {
       <DialogTrigger asChild>
         <Button className="px-4 py-2">ดูรายละเอียดคำสัญญา</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[320px] md:max-w-[520px]">
+      <DialogContent className="max-w-[320px] md:max-w-[520px] max-h-[70vh] overflow-y-auto">
         <DialogHeader className="mt-4">
           <DialogTitle className="text-left leading-snug">
             📝 {promise.title}
@@ -31,7 +31,7 @@ function PromiseDialog({ promise }: { promise: DailyPromise }) {
           <StatusBadge status={"nodata"} />
         </div>
         <p>
-          <span className="font-medium">คำอธิบาย: </span>
+          <span className="font-medium underline">คำอธิบาย:</span>{" "}
           {promise.explain}
         </p>
         {promise.link && (
