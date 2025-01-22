@@ -6,7 +6,7 @@ import PartyInput from "@/components/PartyInput";
 import { Button } from "@/components/ui/button";
 import { CircleHelp } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { parties, Party } from "@/data/party";
 import { cn } from "@/lib/utils";
 import PromiseDialog from "@/components/PromiseDialog";
@@ -62,8 +62,8 @@ export default function PromiseDle() {
   const promise: DailyPromise = {
     title:
       "จัดให้มี Mini Sport Complex ในทุกอำเภอเพื่อการออกกำลังกายและฝึกทักษะด้านกีฬา",
-    partyId: 10,
-    partyName: "ชาติพัฒนา",
+    partyId: 1,
+    partyName: "ประชาธิปัตย์",
     status: "nodata",
     explain:
       "ในสังคมไทยมีผู้สูงอายุ 1 ใน 5 ของประชาชนทั้งหมด พรรคเพื่อชาติมีนโยบายที่จากเดิมเงินช่วยเหลือผู้สูงอายุคิดแบบขั้นบันได เป็นตั้งแต่อายุ 60 ปีขึ้นไป ได้เงิน 2,000บาทต่อเดือน เท่ากันหมด ตลอดชีพ ซึ่งปัจจุบันเป็นแจกเบี้ยยังชีพผู้สูงอายุเป็นระบบขั้นบันได โดยผู้มีอายุ 60 ปี ถึง 69 ปี ได้รับเบี้ยยังชีพคนชรา 600 บาทต่อเดือน อายุ 70 ปี ถึง 79 ปี ได้รับเงิน 700 บาทต่อเดือน อายุ 80 ปี ถึง 89 ปี ได้รับ 800 บาทต่อเดือน อายุ 90ปีขึ้นไป 1,000 บาทต่อเดือน และเพิ่มแค่กลุ่มเปราะบางที่ถือบัตรสวัสดิการแห่งรัฐ\n\nตั้งแต่ปลายเดือนเมษายน 2565 รัฐบาลมีมติออกมาเกี่ยวกับการเพิ่มเงินช่วยเหลือพิเศษแก่ผู้สูงอายุที่ได้รับสิทธิ์สวัสดิการเบี้ยยังชีพในปีงบประมาณ 2565  โดยจะได้รับเงินช่วยเหลือพิเศษเพิ่มเติมแบบขั้นบันได 100-250 บาท  เป็นระยะเวลา 6 เดือน",
@@ -74,6 +74,11 @@ export default function PromiseDle() {
   const [selectedParty, setSelectedParty] = useState<Party | null>(null);
   const [isDone, setIsDone] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
+  const [resultAnimation, resultAnimationApi] = useSpring(() => ({
+    from: { opacity: 0 },
+    config: config.molasses,
+  }));
 
   const onPartyChange = (party: Party | null) => {
     setSelectedParty(party);
@@ -102,6 +107,16 @@ export default function PromiseDle() {
   const partyList = parties.filter(
     (party) => !guesses.some((guess) => guess.partyId === party.id)
   );
+
+  useEffect(() => {
+    if (isDone) {
+      resultRef.current?.scrollIntoView({ behavior: "smooth" });
+      resultAnimationApi.start({
+        to: { opacity: 1 },
+        delay: 500,
+      });
+    }
+  }, [isDone]);
 
   return (
     <div className="min-h-screen flex flex-col gap-8">
@@ -154,7 +169,14 @@ export default function PromiseDle() {
             {isDone && guesses.length < MAX_GUESSES && <EmptyGuess />}
           </div>
           {isDone && (
-            <div className="flex flex-col gap-4 mt-4 items-center">
+            <animated.div
+              ref={resultRef}
+              style={{
+                ...resultAnimation,
+                willChange: "opacity",
+              }}
+              className="flex flex-col gap-4 mt-4 items-center"
+            >
               {isCorrect ? (
                 <p className="text-center">
                   เก่งมาก ! 👍🏼
@@ -168,7 +190,7 @@ export default function PromiseDle() {
                 </p>
               )}
               <PromiseDialog promise={promise} />
-            </div>
+            </animated.div>
           )}
         </div>
       </main>
