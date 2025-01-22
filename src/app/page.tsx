@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import PromiseDialog from "@/components/PromiseDialog";
 import { DailyPromise } from "@/data/promise";
 import { animated, config, useSpring } from "@react-spring/web";
+import { useReward } from "react-rewards";
 interface Guess {
   partyId: number;
   partyName: string;
@@ -57,6 +58,20 @@ const GuessResult: React.FC<{ guess: Guess }> = ({ guess }) => {
   );
 };
 
+const REWARD_EMOJI_LIST = [
+  "🤓",
+  "😊",
+  "🥳",
+  "😎",
+  "😮‍💨",
+  "📚",
+  "📖",
+  "🔖",
+  "📝",
+  "📃",
+  "💡",
+];
+
 export default function PromiseDle() {
   const MAX_GUESSES = 6;
   const promise: DailyPromise = {
@@ -79,6 +94,16 @@ export default function PromiseDle() {
     from: { opacity: 0 },
     config: config.molasses,
   }));
+  const [footerAnimation, footerAnimationApi] = useSpring(() => ({
+    from: { y: -100 },
+    config: config.molasses,
+  }));
+  const { reward: correctReward } = useReward("correctReward", "emoji", {
+    startVelocity: 30,
+    elementCount: 20,
+    lifetime: 100,
+    emoji: REWARD_EMOJI_LIST.sort(() => 0.5 - Math.random()).slice(0, 3),
+  });
 
   const onPartyChange = (party: Party | null) => {
     setSelectedParty(party);
@@ -115,8 +140,16 @@ export default function PromiseDle() {
         to: { opacity: 1 },
         delay: 500,
       });
+      footerAnimationApi.start({
+        to: { y: 0 },
+      });
     }
-  }, [isDone]);
+    if (isCorrect) {
+      setTimeout(() => {
+        correctReward();
+      }, 600);
+    }
+  }, [isDone, isCorrect]);
 
   return (
     <div className="min-h-screen flex flex-col gap-8">
@@ -168,34 +201,39 @@ export default function PromiseDle() {
             )}
             {isDone && guesses.length < MAX_GUESSES && <EmptyGuess />}
           </div>
-          {isDone && (
-            <animated.div
-              ref={resultRef}
-              style={{
-                ...resultAnimation,
-                willChange: "opacity",
-              }}
-              className="flex flex-col gap-4 mt-4 items-center"
-            >
-              {isCorrect ? (
-                <p className="text-center">
-                  เก่งมาก ! 👍🏼
-                  <br />
-                  คุณจำสิ่งที่เขาพูดได้ แต่คนที่พูดจะยังจำได้มั้ยนะ ?
-                </p>
-              ) : (
-                <p className="text-center">
-                  👋🏼 &nbsp; ไม่เป็นไรนะ <br />
-                  ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
-                </p>
-              )}
-              <PromiseDialog promise={promise} />
-            </animated.div>
-          )}
+          <animated.div
+            id="correctReward"
+            ref={resultRef}
+            style={{
+              ...resultAnimation,
+              willChange: "opacity",
+            }}
+            className="flex flex-col gap-4 mt-4 items-center"
+          >
+            {isCorrect ? (
+              <p className="text-center">
+                เก่งมาก ! 👍🏼
+                <br />
+                คุณจำสิ่งที่เขาพูดได้ แต่คนที่พูดจะยังจำได้มั้ยนะ ?
+              </p>
+            ) : (
+              <p className="text-center">
+                👋🏼 &nbsp; ไม่เป็นไรนะ <br />
+                ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
+              </p>
+            )}
+            <PromiseDialog promise={promise} />
+          </animated.div>
         </div>
       </main>
-      <footer className="mt-4 pb-4 md:pb-8 w-full flex items-center justify-center">
-        <span className="flex flex-rol">
+      <animated.footer
+        style={{
+          ...footerAnimation,
+          willChange: "transform",
+        }}
+        className="pb-4 md:pb-8 w-full flex items-center justify-center"
+      >
+        <span className="flex flex-row">
           <Image
             aria-hidden
             src="https://nextjs.org/icons/globe.svg"
@@ -213,7 +251,7 @@ export default function PromiseDle() {
             WeVIS
           </a>
         </span>
-      </footer>
+      </animated.footer>
     </div>
   );
 }
