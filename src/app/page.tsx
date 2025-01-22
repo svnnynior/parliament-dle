@@ -6,11 +6,12 @@ import PartyInput from "@/components/PartyInput";
 import { Button } from "@/components/ui/button";
 import { CircleHelp } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { parties, Party } from "@/data/party";
 import { cn } from "@/lib/utils";
 import PromiseDialog from "@/components/PromiseDialog";
 import { DailyPromise } from "@/data/promise";
+import { animated, config, useSpring } from "@react-spring/web";
 interface Guess {
   partyId: number;
   partyName: string;
@@ -26,8 +27,24 @@ const EmptyGuess: React.FC = () => {
 };
 
 const GuessResult: React.FC<{ guess: Guess }> = ({ guess }) => {
+  const [style, api] = useSpring(() => ({
+    from: { opacity: 0, y: -20 },
+    config: config.molasses,
+  }));
+
+  useEffect(() => {
+    api.start({
+      to: { opacity: 1, y: 0 },
+      delay: 250,
+    });
+  }, []);
+
   return (
-    <div
+    <animated.div
+      style={{
+        ...style,
+        willChange: "opacity, transform",
+      }}
       className={cn(
         "w-full border rounded-md px-3 py-2 text-center",
         guess.isCorrect
@@ -36,11 +53,12 @@ const GuessResult: React.FC<{ guess: Guess }> = ({ guess }) => {
       )}
     >
       พรรค{guess.partyName}
-    </div>
+    </animated.div>
   );
 };
 
 export default function PromiseDle() {
+  const MAX_GUESSES = 6;
   const promise: DailyPromise = {
     title:
       "จัดให้มี Mini Sport Complex ในทุกอำเภอเพื่อการออกกำลังกายและฝึกทักษะด้านกีฬา",
@@ -72,7 +90,7 @@ export default function PromiseDle() {
       setGuesses((prevGuesses) => [...prevGuesses, guess]);
       setSelectedParty(null);
 
-      if (isCorrect || guesses.length >= 5) {
+      if (isCorrect || guesses.length >= MAX_GUESSES - 1) {
         setIsDone(true);
         setIsCorrect(isCorrect);
       }
@@ -112,6 +130,7 @@ export default function PromiseDle() {
             {!isDone && (
               <div className="flex flex-row gap-2">
                 <PartyInput
+                  numGuess={guesses.length}
                   partyList={partyList}
                   selectedParty={selectedParty}
                   onPartyChange={onPartyChange}
@@ -127,10 +146,12 @@ export default function PromiseDle() {
                 </Button>
               </div>
             )}
-            {Array.from({ length: 6 - numGuesses - 1 }).map((_, index) => (
-              <EmptyGuess key={index} />
-            ))}
-            {isDone && guesses.length < 6 && <EmptyGuess />}
+            {Array.from({ length: MAX_GUESSES - numGuesses - 1 }).map(
+              (_, index) => (
+                <EmptyGuess key={index} />
+              )
+            )}
+            {isDone && guesses.length < MAX_GUESSES && <EmptyGuess />}
           </div>
           {isDone && (
             <div className="flex flex-col gap-4 mt-4 items-center">

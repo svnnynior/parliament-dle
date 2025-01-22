@@ -21,12 +21,14 @@ import {
 import { Party } from "@/data/party";
 
 interface PartyInputProps {
+  numGuess: number;
   partyList: Party[];
   selectedParty: Party | null;
   onPartyChange: (party: Party | null) => void;
 }
 
 function PartyInput({
+  numGuess,
   partyList,
   selectedParty,
   onPartyChange,
@@ -51,7 +53,7 @@ function PartyInput({
         asChild
         className="w-[270px] md:w-[320px]"
         align="start"
-        side="bottom"
+        side={numGuess < 3 ? "bottom" : "top"}
         avoidCollisions={false}
       >
         <Command

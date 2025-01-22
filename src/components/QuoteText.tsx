@@ -11,6 +11,10 @@ const QuoteText = ({ text }: { text: string }) => {
     api.start({ opacity: 1 });
   }, []);
 
+  const finishAnimation = () => {
+    api.start({ opacity: 1, immediate: true });
+  };
+
   return (
     <blockquote className="flex flex-col text-xl italic font-semibold dark:text-white">
       <div>
@@ -24,9 +28,15 @@ const QuoteText = ({ text }: { text: string }) => {
           <path d="M22.12 145v97.65h97.65V145H70.95c0-26.92 21.9-48.82 48.82-48.82V47.35c-53.93 0-97.65 43.72-97.65 97.65zm245.76-48.82V47.35c-53.93 0-97.65 43.72-97.65 97.65v97.65h97.65V145h-48.82c-.01-26.92 21.89-48.82 48.82-48.82z"></path>
         </svg>
       </div>
-      <div className="text-xl text-center">
+      <div className="text-xl text-center" onClick={finishAnimation}>
         {trails.map((props, index) => (
-          <animated.span key={index} style={props}>
+          <animated.span
+            key={index}
+            style={{
+              ...props,
+              willChange: "opacity",
+            }}
+          >
             {text[index]}
           </animated.span>
         ))}
