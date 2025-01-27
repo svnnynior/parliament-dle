@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
-import { animated, useTrail } from "@react-spring/web";
+import { animated, useTrail, config } from "@react-spring/web";
+
+const splitText = (text: string) => {
+  // Match sequences of non-space characters or spaces
+  return text.match(/\S+|\s+/g) || [];
+};
 
 const QuoteText = ({ text }: { text: string }) => {
-  const [trails, api] = useTrail(text.length, () => ({
+  const words = splitText(text);
+  const [trails, api] = useTrail(words.length, () => ({
     from: { opacity: 0 },
-    config: { duration: 50 },
+    config: config.gentle,
   }));
 
   useEffect(() => {
@@ -37,7 +43,8 @@ const QuoteText = ({ text }: { text: string }) => {
               willChange: "opacity",
             }}
           >
-            {text[index]}
+            {/* need the space at the end to prevent the last word from being cut off */}
+            {words[index]}{" "}
           </animated.span>
         ))}
       </div>
