@@ -114,13 +114,8 @@ export default function PromiseDle() {
         correctReward();
       }, 600);
     }
-  }, [
-    isDone,
-    isCorrect,
-    correctReward,
-    footerAnimationApi,
-    resultAnimationApi,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDone, isCorrect, footerAnimationApi, resultAnimationApi]);
 
   return (
     <div className="min-h-screen flex flex-col gap-8">
