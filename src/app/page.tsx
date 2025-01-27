@@ -14,7 +14,7 @@ import { useReward } from "react-rewards";
 import HowToDialog from "@/components/HowToDialog";
 import { Guess } from "./types";
 import GuessResult from "@/components/GuessResult";
-import { Share2 } from "lucide-react";
+import { PersonStanding, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { getDailyPromise } from "@/lib/quiz";
 
@@ -120,7 +120,7 @@ export default function PromiseDle() {
   }, [isDone, isCorrect, footerAnimationApi, resultAnimationApi]);
 
   return (
-    <div className="min-h-screen flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
       <header className="flex flex-row justify-between items-center p-4 border-b border-gray-200">
         <HowToDialog />
         <div className="flex flex-col items-center">
@@ -217,7 +217,7 @@ export default function PromiseDle() {
           ...footerAnimation,
           willChange: "transform",
         }}
-        className="pb-4 md:pb-8 w-full flex items-center justify-center"
+        className="pb-4 md:pb-8 w-full flex flex-col gap-3 items-center justify-center"
       >
         <span className="flex flex-row">
           <Image
@@ -235,6 +235,18 @@ export default function PromiseDle() {
             rel="noopener noreferrer"
           >
             WeVIS
+          </a>
+        </span>
+        <span className="flex flex-row text-sm text-zinc-400 dark:text-zinc-600">
+          <PersonStanding size={18} />
+          &nbsp;Made by &nbsp;&nbsp;
+          <a
+            className="flex bold underline underline-offset-2 hover:underline-offset-4 -ml-1"
+            href="https://github.com/svnnynior"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @svnnynior
           </a>
         </span>
       </animated.footer>

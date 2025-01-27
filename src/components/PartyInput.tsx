@@ -53,7 +53,7 @@ function PartyInput({
         asChild
         className="w-[270px] md:w-[320px]"
         align="start"
-        side={numGuess < 3 ? "bottom" : "top"}
+        side={numGuess < 2 ? "bottom" : "top"}
         avoidCollisions={false}
       >
         <Command
