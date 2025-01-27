@@ -132,7 +132,7 @@ export default function PromiseDle() {
         <ThemeToggle />
       </header>
       <main className="flex flex-col px-14 w-full justify-center items-center">
-        <div className="flex flex-col gap-4 max-w-96 justify-center items-center">
+        <div className="flex flex-col gap-4 max-w-[300px] md:max-w-[380px] justify-center items-center">
           <QuoteText text={promise.title} />
           <p className="mt-4">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
           <div className="w-full  flex flex-col gap-2">
