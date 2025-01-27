@@ -20,6 +20,7 @@ export interface Promise {
 
 // move this to the API
 export interface DailyPromise {
+  number: number;
   title: Promise["promiseTitle"];
   partyId: number;
   partyName: string;

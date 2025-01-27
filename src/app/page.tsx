@@ -14,6 +14,8 @@ import { useReward } from "react-rewards";
 import HowToDialog from "@/components/HowToDialog";
 import { Guess } from "./types";
 import GuessResult from "@/components/GuessResult";
+import { Share2 } from "lucide-react";
+import { toast } from "sonner";
 
 const EmptyGuess: React.FC = () => {
   return (
@@ -21,6 +23,12 @@ const EmptyGuess: React.FC = () => {
       &nbsp;
     </div>
   );
+};
+
+const generateShareText = (promise: DailyPromise, guesses: Guess[]) => {
+  return `Promisdle #${promise.number} (${guesses.length}/6)\n\n${guesses
+    .map((guess) => (guess.isCorrect ? "🟩" : "🟥"))
+    .join("")}`;
 };
 
 const REWARD_EMOJI_LIST = [
@@ -40,6 +48,7 @@ const REWARD_EMOJI_LIST = [
 export default function PromiseDle() {
   const MAX_GUESSES = 6;
   const promise: DailyPromise = {
+    number: 999,
     title:
       "จัดให้มี Mini Sport Complex ในทุกอำเภอเพื่อการออกกำลังกายและฝึกทักษะด้านกีฬา",
     partyId: 1,
@@ -185,7 +194,20 @@ export default function PromiseDle() {
                 ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
               </p>
             )}
-            <PromiseDialog promise={promise} />
+            <div className="flex flex-row gap-2">
+              <PromiseDialog promise={promise} />
+              <Button
+                variant="outline"
+                className="border border-zinc-600 dark:border-zinc-300"
+                onClick={() => {
+                  const text = generateShareText(promise, guesses);
+                  navigator.clipboard.writeText(text);
+                  toast.success("คัดลอกผลลัพธ์สำเร็จ");
+                }}
+              >
+                <Share2 />
+              </Button>
+            </div>
           </animated.div>
         </div>
       </main>

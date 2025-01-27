@@ -45,7 +45,7 @@ function PartyInput({
         <Input
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between bg-zinc-300 dark:bg-zinc-800 cursor-pointer"
+          className="w-full justify-between bg-zinc-300 dark:bg-zinc-800 cursor-pointer text-ellipsis"
           value={displayValue}
         />
       </PopoverTrigger>
