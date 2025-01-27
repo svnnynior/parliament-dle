@@ -9,7 +9,7 @@ const QuoteText = ({ text }: { text: string }) => {
 
   useEffect(() => {
     api.start({ opacity: 1 });
-  }, []);
+  }, [api]);
 
   const finishAnimation = () => {
     api.start({ opacity: 1, immediate: true });

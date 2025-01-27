@@ -114,7 +114,13 @@ export default function PromiseDle() {
         correctReward();
       }, 600);
     }
-  }, [isDone, isCorrect]);
+  }, [
+    isDone,
+    isCorrect,
+    correctReward,
+    footerAnimationApi,
+    resultAnimationApi,
+  ]);
 
   return (
     <div className="min-h-screen flex flex-col gap-8">
@@ -136,7 +142,7 @@ export default function PromiseDle() {
           <p className="mt-4">พรรคการเมืองไหนเคยให้คำสัญญานี้ไว้ ?</p>
           <div className="w-full  flex flex-col gap-2">
             {guesses.map((guess) => (
-              <GuessResult guess={guess} />
+              <GuessResult key={guess.partyId} guess={guess} />
             ))}
             {!isDone && (
               <div className="flex flex-row gap-2">

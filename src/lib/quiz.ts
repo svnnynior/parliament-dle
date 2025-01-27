@@ -1,5 +1,5 @@
 import { parties } from "@/data/party";
-import { DailyPromise, Promise } from "@/data/promise";
+import { DailyPromise } from "@/data/promise";
 import { promises } from "@/data/promise";
 
 function seedRandom(seed: string) {
@@ -13,7 +13,7 @@ function seedRandom(seed: string) {
   };
 }
 
-function shuffleArray(array: any[], seed: string) {
+function shuffleArray<T>(array: T[], seed: string): T[] {
   const random = seedRandom(seed);
   const newArray = array.slice(); // Create a new instance of the array
 
@@ -38,7 +38,7 @@ function getQuizNumber(date: Date): number {
 }
 
 const SEED_PHRASE = "we_love_ingchin_<3";
-const THE_PROMISE_LIST: Promise[] = shuffleArray(promises, SEED_PHRASE);
+const THE_PROMISE_LIST = shuffleArray(promises, SEED_PHRASE);
 const DEFAULT_PROMISE: DailyPromise = {
   number: 0,
   title: "หยุดไฟใต้ สร้างสังคมสันติสุขสมานฉันท์",

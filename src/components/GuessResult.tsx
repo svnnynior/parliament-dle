@@ -15,7 +15,7 @@ const GuessResult: React.FC<{ guess: Guess }> = ({ guess }) => {
       to: { opacity: 1, y: 0 },
       delay: 250,
     });
-  }, []);
+  }, [api]);
 
   return (
     <animated.div
