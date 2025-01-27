@@ -16,6 +16,7 @@ import { Guess } from "./types";
 import GuessResult from "@/components/GuessResult";
 import { Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { getDailyPromise } from "@/lib/quiz";
 
 const EmptyGuess: React.FC = () => {
   return (
@@ -47,17 +48,7 @@ const REWARD_EMOJI_LIST = [
 
 export default function PromiseDle() {
   const MAX_GUESSES = 6;
-  const promise: DailyPromise = {
-    number: 999,
-    title:
-      "จัดให้มี Mini Sport Complex ในทุกอำเภอเพื่อการออกกำลังกายและฝึกทักษะด้านกีฬา",
-    partyId: 1,
-    partyName: "ประชาธิปัตย์",
-    status: "nodata",
-    explain:
-      "ในสังคมไทยมีผู้สูงอายุ 1 ใน 5 ของประชาชนทั้งหมด พรรคเพื่อชาติมีนโยบายที่จากเดิมเงินช่วยเหลือผู้สูงอายุคิดแบบขั้นบันได เป็นตั้งแต่อายุ 60 ปีขึ้นไป ได้เงิน 2,000บาทต่อเดือน เท่ากันหมด ตลอดชีพ ซึ่งปัจจุบันเป็นแจกเบี้ยยังชีพผู้สูงอายุเป็นระบบขั้นบันได โดยผู้มีอายุ 60 ปี ถึง 69 ปี ได้รับเบี้ยยังชีพคนชรา 600 บาทต่อเดือน อายุ 70 ปี ถึง 79 ปี ได้รับเงิน 700 บาทต่อเดือน อายุ 80 ปี ถึง 89 ปี ได้รับ 800 บาทต่อเดือน อายุ 90ปีขึ้นไป 1,000 บาทต่อเดือน และเพิ่มแค่กลุ่มเปราะบางที่ถือบัตรสวัสดิการแห่งรัฐ\n\nตั้งแต่ปลายเดือนเมษายน 2565 รัฐบาลมีมติออกมาเกี่ยวกับการเพิ่มเงินช่วยเหลือพิเศษแก่ผู้สูงอายุที่ได้รับสิทธิ์สวัสดิการเบี้ยยังชีพในปีงบประมาณ 2565  โดยจะได้รับเงินช่วยเหลือพิเศษเพิ่มเติมแบบขั้นบันได 100-250 บาท  เป็นระยะเวลา 6 เดือน",
-    link: "https://www.bangkokbiznews.com/advertorials/news/1259",
-  };
+  const promise: DailyPromise = getDailyPromise(new Date());
 
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [selectedParty, setSelectedParty] = useState<Party | null>(null);
