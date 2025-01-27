@@ -4,57 +4,22 @@ import QuoteText from "@/components/QuoteText";
 import ThemeToggle from "@/components/ThemeToggle";
 import PartyInput from "@/components/PartyInput";
 import { Button } from "@/components/ui/button";
-import { CircleHelp } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { parties, Party } from "@/data/party";
-import { cn } from "@/lib/utils";
 import PromiseDialog from "@/components/PromiseDialog";
 import { DailyPromise } from "@/data/promise";
 import { animated, config, useSpring } from "@react-spring/web";
 import { useReward } from "react-rewards";
-interface Guess {
-  partyId: number;
-  partyName: string;
-  isCorrect: boolean;
-}
+import HowToDialog from "@/components/HowToDialog";
+import { Guess } from "./types";
+import GuessResult from "@/components/GuessResult";
 
 const EmptyGuess: React.FC = () => {
   return (
     <div className="w-full bg-zinc-100 dark:bg-zinc-900 border rounded-md px-3 py-2">
       &nbsp;
     </div>
-  );
-};
-
-const GuessResult: React.FC<{ guess: Guess }> = ({ guess }) => {
-  const [style, api] = useSpring(() => ({
-    from: { opacity: 0, y: -20 },
-    config: config.molasses,
-  }));
-
-  useEffect(() => {
-    api.start({
-      to: { opacity: 1, y: 0 },
-      delay: 250,
-    });
-  }, []);
-
-  return (
-    <animated.div
-      style={{
-        ...style,
-        willChange: "opacity, transform",
-      }}
-      className={cn(
-        "w-full border rounded-md px-3 py-2 text-center",
-        guess.isCorrect
-          ? "bg-green-400 dark:bg-green-600"
-          : "bg-red-300 dark:bg-red-900"
-      )}
-    >
-      พรรค{guess.partyName}
-    </animated.div>
   );
 };
 
@@ -154,9 +119,7 @@ export default function PromiseDle() {
   return (
     <div className="min-h-screen flex flex-col gap-8">
       <header className="flex flex-row justify-between items-center p-4 border-b border-gray-200">
-        <Button variant="outline" size="icon">
-          <CircleHelp />
-        </Button>
+        <HowToDialog />
         <div className="flex flex-col items-center">
           <span className="text-xl md:text-3xl font-bold">
             🇹🇭 Parliament-dle
