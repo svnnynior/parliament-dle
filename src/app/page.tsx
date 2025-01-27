@@ -29,7 +29,9 @@ const EmptyGuess: React.FC = () => {
 const generateShareText = (promise: DailyPromise, guesses: Guess[]) => {
   return `Promisdle #${promise.number} (${guesses.length}/6)\n\n${guesses
     .map((guess) => (guess.isCorrect ? "🟩" : "🟥"))
-    .join("")}`;
+    .join(
+      ""
+    )}\n\nคุณยังจำสิ่งที่พรรคการเมืองพูดได้มั้ย?\nลองมาเล่นกันที่: https://parliamentdle.fun`;
 };
 
 const REWARD_EMOJI_LIST = [
