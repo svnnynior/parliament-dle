@@ -172,7 +172,7 @@ export default function PromiseDle() {
               ...resultAnimation,
               willChange: "opacity",
             }}
-            className="flex flex-col gap-4 mt-4 items-center"
+            className="flex flex-col gap-2 mt-4 items-center"
           >
             {isCorrect ? (
               <p className="text-center">
@@ -181,10 +181,17 @@ export default function PromiseDle() {
                 คุณจำสิ่งที่เขาพูดได้ แต่คนที่พูดจะยังจำได้อยู่มั้ยนะ ?
               </p>
             ) : (
-              <p className="text-center">
-                👋🏼 &nbsp; ไม่เป็นไรนะ <br />
-                ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
-              </p>
+              <div>
+                <p className="text-center">
+                  👋🏼 &nbsp; ไม่เป็นไรนะ <br />
+                  ขนาดคนที่เป็นคนให้คำสัญญาเอง บางทีเขาก็ยังจำไม่ได้เลย...
+                </p>
+                <div className="flex flex-col text-lg mt-4 text-center">
+                  <p>
+                    เฉลย: <b>พรรค{promise.partyName}</b>
+                  </p>
+                </div>
+              </div>
             )}
             <div className="flex flex-row gap-2">
               <PromiseDialog promise={promise} />
