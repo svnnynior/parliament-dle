@@ -234,7 +234,7 @@ export default function PromiseDle() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            WeVIS
+            WeVis
           </a>
         </span>
         <span className="flex flex-row text-sm text-zinc-400 dark:text-zinc-600">
