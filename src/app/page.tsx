@@ -8,7 +8,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { parties, Party } from "@/data/party";
 import PromiseDialog from "@/components/PromiseDialog";
-import { DailyPromise } from "@/data/promise";
 import { animated, config, useSpring } from "@react-spring/web";
 import { useReward } from "react-rewards";
 import HowToDialog from "@/components/HowToDialog";
@@ -16,7 +15,7 @@ import { Guess } from "./types";
 import GuessResult from "@/components/GuessResult";
 import { PersonStanding, Share2 } from "lucide-react";
 import { toast } from "sonner";
-import { getDailyPromise } from "@/lib/quiz";
+import { DailyPromise, getDailyPromise } from "@/lib/quiz";
 
 const EmptyGuess: React.FC = () => {
   return (
@@ -78,7 +77,7 @@ export default function PromiseDle() {
 
   const onGuess = useCallback(
     (party: Party) => {
-      const isCorrect = promise.partyId === party.id;
+      const isCorrect = promise.party.id === party.id;
       const guess: Guess = {
         partyId: party.id,
         partyName: party.name,
@@ -92,7 +91,7 @@ export default function PromiseDle() {
         setIsCorrect(isCorrect);
       }
     },
-    [guesses, promise.partyId]
+    [guesses, promise.party.id]
   );
 
   const numGuesses = guesses.length;
@@ -190,7 +189,7 @@ export default function PromiseDle() {
                 </p>
                 <div className="flex flex-col text-lg mt-4 text-center">
                   <p>
-                    เฉลย: <b>พรรค{promise.partyName}</b>
+                    เฉลย: <b>พรรค{promise.party.name}</b>
                   </p>
                 </div>
               </div>

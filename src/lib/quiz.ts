@@ -1,6 +1,14 @@
-import { parties } from "@/data/party";
-import { DailyPromise } from "@/data/promise";
-import { promises } from "@/data/promise";
+import { parties, Party, PartyPosition } from "@/data/party";
+import { Promise, promises } from "@/data/promise";
+
+export interface DailyPromise {
+  number: number;
+  title: Promise["promiseTitle"];
+  party: Party;
+  status: Promise["status"];
+  explain: Promise["explain"];
+  link: string | null;
+}
 
 function seedRandom(seed: string) {
   let h = 0;
@@ -42,8 +50,13 @@ const THE_PROMISE_LIST = shuffleArray(promises, SEED_PHRASE);
 const DEFAULT_PROMISE: DailyPromise = {
   number: 0,
   title: "หยุดไฟใต้ สร้างสังคมสันติสุขสมานฉันท์",
-  partyId: 39,
-  partyName: "เสรีรวมไทย",
+  party: {
+    id: 39,
+    name: "เสรีรวมไทย",
+    codeTH: "สร",
+    codeEN: "TLP",
+    currentPosition: PartyPosition.Coalition,
+  },
   status: "nodata",
   explain:
     "ปี 2564 พรรคเสรีรวมไทยกล่าวว่า เนื่องจากไม่ได้เป็นพรรครัฐบาล จึงไม่สามารถดำเนินการให้นโยบาย 6 หยุด ที่พรรคหาเสียงไว้ก่อนเลือกตั้งเกิดขึ้นได้จริง แต่ในฐานะฝ่ายค้าน โดยเฉพาะคณะกรรมาธิการป้องกันและปราบปรามการทุจริตประพฤติมิชอบ (ป.ป.ช.) ที่มีพล.ต.อ.เสรีพิศุทธ์ เตมียเวส หัวหน้าพรรคเป็นประธานกรรมาธิการฯ ได้ทำหน้าที่อย่างเต็มที่ ทั้ง การตรวจสอบคุณสมบัติของท่าน ส.ส. ผู้ทรงเกียรติหลายท่านที่ขาดคุณสมบัติ แต่มาลงสมัครรับเลือกตั้ง เป็นอีกทางที่ช่วยประชาชนตรวจสอบและคัดกรองผู้ที่เหมาะสม",
@@ -61,8 +74,7 @@ export function getDailyPromise(date: Date): DailyPromise {
   const todayPromise: DailyPromise = {
     number: quizNumber,
     title: selectedPromise.promiseTitle,
-    partyId: party?.id,
-    partyName: party?.name,
+    party: party,
     status: selectedPromise.status,
     explain: selectedPromise.explain,
     link: selectedPromise.urlLink1,
