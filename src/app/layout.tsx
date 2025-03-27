@@ -12,7 +12,8 @@ const chakraPetch = Chakra_Petch({
 
 export const metadata: Metadata = {
   title: "Parliamentdle - A daily game on Thai politics",
-  description: "Guess who made the promise",
+  description:
+    "Parliamentdle is a set of daily games about Thai politics, including the game of guessing the political party who made the promise, and the game of guessing the income of Thai politicians. It created based on the open-data provided by WeVis.",
   icons:
     "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>",
 };
